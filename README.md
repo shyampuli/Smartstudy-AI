@@ -131,7 +131,10 @@ gcloud run deploy smartstudy-ai \
   --allow-unauthenticated
 
 ## 🔐 Required Environment Variables (Cloud Run)
-Variable	               Description
-BUCKET_NAME	             GCS bucket for file storage
-GEMINI_API_KEY	         Gemini Flash API key
-GCP_PROJECT	             Google Cloud project ID
+Variables:
+
+BUCKET_NAME	->             GCS bucket for file storage
+
+GEMINI_API_KEY ->         Gemini Flash API key
+
+GCP_PROJECT	->             Google Cloud project ID
