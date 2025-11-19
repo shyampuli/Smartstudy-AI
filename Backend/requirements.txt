@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+google-cloud-storage
+google-cloud-firestore
+google-generativeai
+python-multipart
+reportlab
+python-dotenv
+json5
