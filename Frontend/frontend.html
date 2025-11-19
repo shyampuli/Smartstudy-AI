@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SmartStudy AI — Frontend</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root { --bg-light:#ffffff; --panel:#ffffff; --muted:#444; --accent:#7c3aed; }
+    .dark { --bg-light:#0b1220; --panel:#081322; --muted:#9ca3af; --accent:#8b5cf6; }
+
+    body { background: linear-gradient(180deg, var(--bg-light), rgba(124,58,237,0.02)); }
+
+    .glass {
+      background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.4));
+      backdrop-filter: blur(6px);
+    }
+
+    .dark .glass {
+      background: linear-gradient(180deg, rgba(10,14,20,0.6), rgba(8,19,34,0.4));
+    }
+
+    .smooth { transition: all 220ms cubic-bezier(.2,.9,.3,1); }
+
+    .sidebar-item.active { box-shadow: inset 4px 0 0 var(--accent); }
+
+    .result-pre { white-space: pre-wrap; word-break: break-word; }
+
+    /* Theme enforcement: light -> black text, dark -> white text */
+    html.light-mode, html.light-mode * { color: #000 !important; }
+    html.dark, html.dark * { color: #fff !important; }
+
+    /* Result box styling and fitting */
+    .result-box {
+      max-height: 320px;
+      overflow-y: auto;
+      font-size: 0.95rem;
+      line-height: 1.35;
+      word-break: break-word;
+      white-space: pre-wrap;
+      padding: 6px;
+    }
+    .result-box p { margin: 0 0 0.6rem 0; }
+    .result-box ul { margin: 0 0 0.6rem 1rem; padding: 0; }
+    .result-box .q { font-weight: 600; margin-bottom: 0.25rem; }
+    .result-box .a { margin-bottom: 0.6rem; }
+    .result-box .summary { font-weight: 500; }
+    .result-box .key-point { margin-bottom: 0.35rem; }
+    .result-box, .result-box * {
+      font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+      font-weight: 400;
+    }
+
+    /* smaller pre styling for raw JSON fallback */
+    .small-pre { font-size: 0.85rem; white-space: pre-wrap; word-break: break-word; }
+
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+  <script>
+    const { createElement: e, useState, useEffect } = React;
+
+    function App() {
+      const [theme, setTheme] = useState(localStorage.getItem('ss_theme') || 'light');
+      const [active, setActive] = useState('text');
+      const [textInput, setTextInput] = useState('');
+      const [file, setFile] = useState(null);
+      const [loading, setLoading] = useState(false);
+      const [result, setResult] = useState(null);
+     
+      useEffect(() => {
+        document.documentElement.classList.toggle('dark', theme === 'dark');
+        document.documentElement.classList.toggle('light-mode', theme === 'light');
+        try { localStorage.setItem('ss_theme', theme); } catch (e) {}
+      }, [theme]);
+
+      const API_ROOT = ''; // set to backend origin if needed
+
+      async function postForm(path, form) {
+        try {
+          const res = await fetch(API_ROOT + path, { method: 'POST', body: form });
+          const ct = res.headers.get('content-type') || '';
+          if (ct.includes('application/json')) return await res.json();
+          const txt = await res.text();
+          try { return JSON.parse(txt); } catch (_) { return { raw_output: txt }; }
+        } catch (err) {
+          return { error: String(err) };
+        }
+      }
+
+      function normalizeResult(data) {
+  try {
+    if (!data) return null;
+
+    if (typeof data.result === "string"){
+      return data.result;
+    }
+
+    if (data.raw_output && typeof data.raw_output === "string") {
+      return JSON.parse(data.raw_output); 
+    }
+
+    if (data.result && typeof data.result.raw_output === "string") {
+      return JSON.parse(data.result.raw_output);
+    }
+
+    if (data.result && typeof data.result === "object") return data.result;
+    if (typeof data === "object") return data;
+
+    return String(data);
+
+  } catch (err) {
+    return data;
+  }
+}
+
+
+      async function handleProcessText(ev) {
+        ev && ev.preventDefault();
+        setLoading(true);
+        setResult(null);
+        const form = new FormData();
+        form.append('user_id', 'demo-user');
+        form.append('title', 'Text Summary');
+        form.append('text', textInput);
+        const data = await postForm('/process-text', form);
+        setResult(normalizeResult(data));
+        setLoading(false);
+      }
+
+      async function handleUploadFile(ev) {
+        ev && ev.preventDefault();
+        if (!file) { alert('Select a file first'); return; }
+        setLoading(true);
+        setResult(null);
+        const form = new FormData();
+        form.append('user_id', 'demo-user');
+        form.append('title', file.name || 'Uploaded File');
+        form.append('file', file);
+        const data = await postForm('/upload-file', form);
+        setResult(normalizeResult(data));
+        setLoading(false);
+      }
+
+      async function handleGenerateMCQ(ev) {
+        ev && ev.preventDefault();
+        setLoading(true);
+        setResult(null);
+        const form = new FormData();
+        form.append('user_id', 'demo-user');
+        form.append('source_text', textInput);
+        form.append('title', 'MCQs & Flashcards');
+        const data = await postForm('/generate-mcq-flashcards', form);
+        setResult(normalizeResult(data));
+        setLoading(false);
+      }
+
+
+      function SidebarButton({ keyName, label }) {
+        return e('button', {
+          onClick: () => setActive(keyName),
+          className: `w-full text-left p-3 rounded-lg smooth sidebar-item ${active === keyName ? 'active bg-opacity-10' : ''}`
+        }, label);
+      }
+
+     function renderUploadedDocument(resultObj) {
+  return e("div", { className: "result-box" },
+    resultObj.summary
+      ? e("p", { className: "summary" }, resultObj.summary)
+      : e("p", null, "No summary found.")
+  );
+}
+
+      function renderResult() {
+        if (loading) return e('div', { className: 'p-6 text-center' }, 'Processing — please wait...');
+        if (!result) return e('div', { className: 'text-sm text-muted' }, 'Your AI output will appear here');
+
+        // If result is a plain string
+        if (typeof result === 'string') {
+          return e('div', { className: 'result-box' },
+            e('pre', { className: 'small-pre' }, result)
+          );
+        }
+
+        // If uploaded document shape (summary + key_points / flashcards)
+        if (result.summary && !result.flashcards && !result.mcqs) {
+          return renderUploadedDocument(result);
+        }
+
+        // If result contains only a summary (e.g. text summary)
+        if (result.summary) {
+          return e('div', { className: 'result-box' },
+            e('p', { className: 'summary' }, result.summary)
+          );
+        }
+
+        // If result has flashcards array (from MCQ/Flashcard endpoint)
+        if (Array.isArray(result.flashcards) && result.flashcards.length > 0) {
+          return e('div', { className: 'result-box' },
+            ...result.flashcards.map((fc, i) =>
+              e('div', { key: i, style: { marginBottom: '0.5rem' } },
+                e('div', { className: 'q' }, `Q${i + 1}: ${fc.q}`),
+                e('div', { className: 'a' }, `A: ${fc.a}`)
+              )
+            )
+          );
+        }
+
+        // If result has mcqs array — present as Question / Answer format (not multiple-choice display)
+        if (Array.isArray(result.mcqs) && result.mcqs.length > 0) {
+          return e('div', { className: 'result-box' },
+            ...result.mcqs.map((m, i) =>
+              e('div', { key: i, style: { marginBottom: '1rem' } },
+                e('div', { className: 'q' }, `Q${i + 1}: ${m.q}`),
+                // Show options below (compact), then show Answer
+                m.answer ? e('div', {className: 'a'}, `Answer: ${m.answer}`) : null
+              )
+            )
+          );
+        }
+
+        // Fallback: render JSON prettily but compact to fit box
+        return e('div', { className: 'result-box' },
+          e('pre', { className: 'small-pre' }, JSON.stringify(result, null, 2))
+        );
+      }
+
+      return e('div', { className: 'min-h-screen flex' },
+
+        // Sidebar
+        e('aside', { className: 'w-72 p-4 border-r border-slate-200 dark:border-slate-800 bg-opacity-40 glass' },
+          e('div', { className: 'mb-6 flex items-center gap-3' },
+            e('div', { className: 'h-10 w-10 rounded-lg bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center text-white font-bold' }, 'SS'),
+            e('div', null,
+              e('h2', { className: 'text-lg font-semibold' }, 'SmartStudy AI'),
+              e('p', { className: 'text-sm text-muted-foreground' }, 'Study assistant')
+            )
+          ),
+          e('nav', { className: 'space-y-1' },
+            e(SidebarButton, { keyName: 'text', label: 'Text' }),
+            e(SidebarButton, { keyName: 'upload', label: 'Upload' }),
+            e(SidebarButton, { keyName: 'mcq', label: 'MCQs' }),
+            e(SidebarButton, { keyName: 'settings', label: 'Settings' })
+          ),
+          e('div', { className: 'mt-6 text-sm text-muted' }, 'Tip: Use the sidebar to switch tools.')
+        ),
+
+        // Main
+        e('main', { className: 'flex-1 p-6' },
+          e('div', { className: 'flex justify-between items-start mb-6' },
+            e('h1', { className: 'text-2xl font-semibold' }, 'Create study material'),
+            e('div', { className: 'flex items-center gap-3' },
+              e('button', {
+                onClick: () => setTheme(t => t === 'dark' ? 'light' : 'dark'),
+                className: 'px-3 py-2 rounded-lg smooth border'
+              }, theme === 'dark' ? 'Light' : 'Dark'),
+              e('div', { className: 'text-sm text-muted' }, loading ? 'Working...' : '')
+            )
+          ),
+
+          // Panels grid
+          e('div', { className: 'grid grid-cols-1 md:grid-cols-3 gap-6' },
+
+            // Left / main panel (2 cols on md)
+            e('section', { className: 'md:col-span-2 p-4 glass rounded-2xl shadow-sm' },
+
+              active === 'text' && e('div', null,
+                e('form', { onSubmit: handleProcessText, className: 'space-y-4' },
+                  e('textarea', {
+                    placeholder: 'Paste text or notes here',
+                    value: textInput,
+                    onChange: ev => setTextInput(ev.target.value),
+                    className: 'w-full h-40 p-3 rounded-md border border-slate-200 dark:border-slate-800 bg-transparent smooth'
+                  }),
+                  e('div', { className: 'flex gap-3' },
+                    e('button', { type: 'submit', className: 'px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 text-white smooth' }, 'Summarize'),
+                    e('button', { type: 'button', onClick: () => { setTextInput(''); setResult(null); }, className: 'px-4 py-2 rounded-lg border smooth' }, 'Clear')
+                  )
+                )
+              ),
+
+              active === 'upload' && e('div', null,
+                e('form', { onSubmit: handleUploadFile, className: 'space-y-4' },
+                  e('div', { className: 'flex items-center gap-3' },
+                    e('input', { type: 'file', onChange: ev => setFile(ev.target.files[0]), className: 'file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700' }),
+                    e('div', { className: 'text-sm text-muted' }, file ? file.name : 'No file chosen')
+                  ),
+                  e('div', { className: 'flex gap-3' },
+                    e('button', { type: 'submit', className: 'px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 text-white smooth' }, 'Upload & Extract'),
+                    e('button', { type: 'button', onClick: () => { setFile(null); setResult(null); }, className: 'px-4 py-2 rounded-lg border smooth' }, 'Clear')
+                  )
+                )
+              ),
+
+              active === 'mcq' && e('div', null,
+                e('form', { onSubmit: handleGenerateMCQ, className: 'space-y-4' },
+                  e('textarea', { placeholder: 'Paste source text for MCQs & flashcards', value: textInput, onChange: ev => setTextInput(ev.target.value), className: 'w-full h-36 p-3 rounded-md border border-slate-200 dark:border-slate-800 bg-transparent smooth' }),
+                  e('div', { className: 'flex gap-3' },
+                    e('button', { type: 'submit', className: 'px-4 py-2 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 text-white smooth' }, 'Generate MCQs & Flashcards'),
+                    e('button', { type: 'button', onClick: () => { setTextInput(''); setResult(null); }, className: 'px-4 py-2 rounded-lg border smooth' }, 'Clear')
+                  )
+                )
+              ),
+
+              active === "explain" && e("div", null,
+                e("form", { onSubmit: handleExplain, className: "space-y-4" },
+                  e("textarea", {
+                    placeholder: "Enter topic to explain...",
+                    value: textInput,
+                    onChange: ev => setTextInput(ev.target.value),
+                    className: "w-full h-40 p-3 rounded-md border bg-transparent"
+               }),
+               e("button", { type: "submit", className: "px-4 py-2 rounded-lg bg-purple-600 text-white" }, "Explain")
+             )
+            ),
+
+              active === 'settings' && e('div', null,
+                e('div', { className: 'space-y-3' },
+                  e('div', null,
+                    e('label', { className: 'block text-sm' }, 'Theme'),
+                    e('div', { className: 'mt-2 flex gap-2' },
+                      e('button', { onClick: () => setTheme('light'), className: `px-3 py-2 rounded-lg smooth ${theme === 'light' ? 'ring-2 ring-offset-2' : ''}` }, 'Light'),
+                      e('button', { onClick: () => setTheme('dark'), className: `px-3 py-2 rounded-lg smooth ${theme === 'dark' ? 'ring-2 ring-offset-2' : ''}` }, 'Dark')
+                    )
+                  ),
+                  e('div', null, e('p', { className: 'text-sm text-muted' }, 'SmartStudy AI frontend — connect to your deployed backend.'))
+                )
+              )
+            ),
+            // Right column: result viewer
+            e('aside', { className: 'p-4 glass rounded-2xl shadow-sm' },
+              e('h3', { className: 'text-lg font-medium mb-3' }, 'Result'),
+              renderResult(),
+              e('div', { className: 'mt-6 flex gap-2' },
+                e('button', { onClick: () => { try { const text = result ? JSON.stringify(result, null, 2) : ''; navigator.clipboard && navigator.clipboard.writeText(text); } catch (e) {} }, className: 'px-3 py-2 rounded-lg border smooth' }, 'Copy'),
+                e('button', { onClick: () => { setResult(null); }, className: 'px-3 py-2 rounded-lg border smooth' }, 'Clear')
+              )
+            )
+          )
+        )
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(e(App));
+  </script>
+</body>
+</html>
