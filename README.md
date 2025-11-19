@@ -99,16 +99,6 @@ IAM
 
 Cloud Build
 
-## 📁 Project Structure
-smartstudy-ai/
-│── main.py
-│── frontend.html
-│── requirements.txt
-│── Dockerfile
-│── .dockerignore
-│── architecture/
-│     └── smartstudy-architecture.png
-
 ## 🧪 Run Locally
 
 Install dependencies:
