@@ -55,15 +55,7 @@ Cloud Storage
 Gemini AI
 
 ## 🏗️ Architecture
-User → Frontend (HTML + JS)
-
-      → Backend API (FastAPI on Cloud Run)
-      
-      → Gemini Flash 2.5 (Summaries, MCQs, Flashcards, OCR)
-      
-      → Firestore (notes storage)
-      
-      → Cloud Storage (file storage)
+User  → Frontend (HTML + JS)   → Backend API (FastAPI on Cloud Run)   → Gemini Flash 2.5 (Summaries, MCQs, Flashcards, OCR)   → Firestore (notes storage)   → Cloud Storage (file storage)
 
 
 ![Architecture](smartstudy-architecture.png)
