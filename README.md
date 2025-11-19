@@ -20,21 +20,21 @@ SmartStudy AI generates:
 📄 OCR extraction from PDFs & Images
 
 ## ✨ Features
-📝 Text-to-Summary
+### 📝 Text-to-Summary
 
 Paste any text → Get a clean, AI-generated summary.
 
-📂 File Upload (PDF/Image)
+### 📂 File Upload (PDF/Image)
 
 Upload PDFs or images → Gemini extracts text → produces structured notes.
 
-🎯 MCQ & Flashcard Generator
+### 🎯 MCQ & Flashcard Generator
 
 From text or existing saved notes:
 
 5 Flashcards  or  5 MCQs
 
-🎨 Beautiful Frontend
+### 🎨 Beautiful Frontend
 
 Responsive UI
 
@@ -42,7 +42,7 @@ Sidebar navigation
 
 Dark/Light mode toggle
 
-☁️ Fully Serverless
+### ☁️ Fully Serverless
 
 Runs entirely on:
 
@@ -56,62 +56,66 @@ Gemini AI
 
 ## 🏗️ Architecture
 User → Frontend (HTML + JS)
+
       → Backend API (FastAPI on Cloud Run)
+      
       → Gemini Flash 2.5 (Summaries, MCQs, Flashcards, OCR)
+      
       → Firestore (notes storage)
+      
       → Cloud Storage (file storage)
 
 
 ![Architecture](smartstudy-architecture.png)
 
 ## 🔧 Tech Stack
-Frontend
+1. Frontend
 
-HTML
+2. HTML
 
-CSS
+3. CSS
 
-JavaScript
+4. JavaScript
 
-Dark & Light Theme
+5. Dark & Light Theme
 
-Sidebar Navigation
+6. Sidebar Navigation
 
-Backend
+7. Backend
 
-Python (FastAPI)
+8. Python (FastAPI)
 
-Uvicorn
+9. Uvicorn
 
-Google Generative AI SDK
+10. Google Generative AI SDK
 
-Google Firestore
+11. Google Firestore
 
-Google Cloud Storage
+12. Google Cloud Storage
 
-Cloud
+13. Cloud
 
-Cloud Run
+14. Cloud Run
 
-Artifact Registry
+15. Artifact Registry
 
-IAM
+16. IAM
 
-Cloud Build
+17. Cloud Build
 
 ## 🧪 Run Locally
 
-Install dependencies:
+### Install dependencies:
 
 pip install -r requirements.txt
 
 
-Run the backend:
+### Run the backend:
 
 python main.py
 
 
-Access frontend:
+### Access frontend:
 
 http://localhost:8080
 
@@ -138,3 +142,11 @@ BUCKET_NAME	->             GCS bucket for file storage
 GEMINI_API_KEY ->         Gemini Flash API key
 
 GCP_PROJECT	->             Google Cloud project ID
+
+## 🚀 Live Demo (Cloud Run)
+
+🟢 **SmartStudy AI is live here:**  
+👉 https://smartstudy-ai-294186065460.asia-south1.run.app/
+
+
+
