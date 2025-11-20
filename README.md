@@ -31,7 +31,6 @@ Transform notes, PDFs, and documents into **summaries, flashcards, and MCQs** us
 **SmartStudy AI** is a cloud-native learning assistant that converts raw study content into structured material.
 
 ✔ Summaries  
-✔ Flashcards  
 ✔ MCQs  
 ✔ PDF extraction & OCR  
 ✔ Stored in Firestore with persistent user notes  
