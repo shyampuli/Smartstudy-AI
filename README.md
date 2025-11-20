@@ -81,25 +81,30 @@ Transform notes, PDFs, and documents into **summaries, flashcards, and MCQs** us
 ```bash
 git clone https://github.com/yourusername/smartstudy-ai.git
 cd smartstudy-ai
+```
+---
 
- 2️⃣ Backend Setup
+### **2️⃣ Backend Setup**
 ```bash
 Copy code
 pip install -r requirements.txt
 uvicorn main:app --reload
-3️⃣ Frontend Setup
-bash
+```
+### **3️⃣ Frontend Setup**
+```bash
 Copy code
 npm install
 npm run dev
-☁ Deploy to Cloud Run
-bash
+```
+### **☁ Deploy to Cloud Run**
+```bash
 Copy code
 gcloud builds submit --tag gcr.io/$PROJECT_ID/smartstudy
 gcloud run deploy smartstudy-ai \
 --image gcr.io/$PROJECT_ID/smartstudy \
 --allow-unauthenticated
-🤝 Contributing
+```
+### **🤝 Contributing**
 
 Pull requests welcome!
 If you'd like to contribute, fork the repo and submit a PR.
@@ -107,12 +112,6 @@ If you'd like to contribute, fork the repo and submit a PR.
 git checkout -b feature-name
 git commit -m "Added feature"
 git push origin feature-name
-
-⭐ Support This Project
-
-If you like this project, give it a star!
-
-⭐ Star this repo
 
 
 <div align="center"> Made by <b>Shyam</b> </div> ```
