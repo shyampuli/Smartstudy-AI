@@ -4,12 +4,10 @@
 ### *AI-Powered Study Material Generator*
 Transform notes, PDFs, and documents into **summaries, flashcards, and MCQs** using Google Gemini.
 
-![banner](https://via.placeholder.com/1400x400?text=SmartStudy+AI+Banner)
-
 ---
 
 ### 🔗 **Live Demo (Cloud Run URL)**
-👉 _https://your-deployment-url.com_
+👉 _[https://your-deployment-url.com](https://smartstudy-ai-294186065460.asia-south1.run.app/)_
 
 ### 👤 **Author**
 **Shyamprasad Puli**
