@@ -1,144 +1,138 @@
-# 📘 SmartStudy AI — AI-Powered Learning Assistant
+<div align="center">
 
-(Google Cloud Run • Gemini AI • Firestore • Cloud Storage)
+# 🚀 **SmartStudy AI**
+### *AI-Powered Study Material Generator*
+Transform notes, PDFs, and documents into **summaries, flashcards, and MCQs** using Google Gemini.
 
-## 🚀 Overview
+![banner](https://via.placeholder.com/1400x400?text=SmartStudy+AI+Banner)
 
-SmartStudy AI is an intelligent study assistant that converts text, PDFs, and images into structured learning material using Gemini Flash 2.5.
-The backend runs fully on Google Cloud Run, using Firestore and Cloud Storage for persistence.
+---
 
-SmartStudy AI generates:
+### 🔗 **Live Demo (Cloud Run URL)**
+👉 _https://your-deployment-url.com_
 
-📝 Summaries
+### 👤 **Author**
+**Shyamprasad Puli**
 
-🌟 Key Points
+---
 
-🃏 Flashcards
+### 🌟 Badges
 
-❓ MCQs
+![Static Badge](https://img.shields.io/badge/Made%20with-React-blue?style=for-the-badge&logo=react)
+![Static Badge](https://img.shields.io/badge/Backend-FastAPI-green?style=for-the-badge&logo=fastapi)
+![Static Badge](https://img.shields.io/badge/Cloud-GoogleCloud-blue?style=for-the-badge&logo=googlecloud)
+![Static Badge](https://img.shields.io/badge/AI-Gemini-purple?style=for-the-badge&logo=google)
+![Static Badge](https://img.shields.io/badge/Database-Firestore-orange?style=for-the-badge&logo=firebase)
 
-📄 OCR extraction from PDFs & Images
+</div>
 
-## ✨ Features
-### 📝 Text-to-Summary
+---
 
-Paste any text → Get a clean, AI-generated summary.
+## 📌 **Overview**
 
-### 📂 File Upload (PDF/Image)
+**SmartStudy AI** is a cloud-native learning assistant that converts raw study content into structured material.
 
-Upload PDFs or images → Gemini extracts text → produces structured notes.
+✔ Summaries  
+✔ Flashcards  
+✔ MCQs  
+✔ PDF extraction & OCR  
+✔ Stored in Firestore with persistent user notes  
 
-### 🎯 MCQ & Flashcard Generator
+[IMAGE — Architecture Diagram]
 
-From text or existing saved notes:
+---
 
-5 Flashcards  or  5 MCQs
+## 🧠 **Why SmartStudy AI?**
 
-### 🎨 Beautiful Frontend
+| Problem | Solution |
+|---------|----------|
+| Manual note-making is time-consuming | Auto-generate summaries & MCQs |
+| Hard to revise lengthy PDFs | Flashcards auto-generated |
+| Notes not accessible everywhere | Stored securely in Firestore |
+| Scaling apps is hard | Cloud Run handles autoscaling |
 
-Responsive UI
+---
 
-Sidebar navigation
+## 🛠 **Tech Stack**
 
-Dark/Light mode toggle
+| Layer | Technology |
+|-------|------------|
+| Frontend | React + Tailwind |
+| Backend | FastAPI |
+| AI Engine | Gemini API |
+| Storage | Cloud Storage |
+| Database | Firestore |
+| Hosting | Cloud Run |
 
-### ☁️ Fully Serverless
+---
 
-Runs entirely on:
+## 🖥 **Screenshots**
 
-Cloud Run
+> Replace placeholders with real images
 
-Firestore
+**📌 Home Screen UI**  
+![UI Screenshot](https://via.placeholder.com/1200x600?text=App+UI)
 
-Cloud Storage
+**📌 Flashcards Output**  
+![Output Screenshot](https://via.placeholder.com/1200x600?text=Flashcards+Output)
 
-Gemini AI
+---
 
-## 🏗️ Architecture
-User  → Frontend (HTML + JS)   → Backend API (FastAPI on Cloud Run)   → Gemini Flash 2.5 (Summaries, MCQs, Flashcards, OCR)   → Firestore (notes storage)   → Cloud Storage (file storage)
+## 🧩 **Features**
 
+- ✨ Upload PDFs/images → extract content
+- 🔍 Summarization using Gemini
+- 🧠 Auto-generated flashcards
+- 📝 MCQs for revision
+- ☁ Cloud Run serverless backend
+- 🔐 Stored securely in Firestore
 
-![Architecture](smartstudy-architecture.png)
+---
 
-## 🔧 Tech Stack
-1. Frontend
+## 🏗 **Setup & Installation**
 
-2. HTML
+### **1️⃣ Clone Repo**
 
-3. CSS
+```bash
+git clone https://github.com/yourusername/smartstudy-ai.git
+cd smartstudy-ai
 
-4. JavaScript
-
-5. Dark & Light Theme
-
-6. Sidebar Navigation
-
-7. Backend
-
-8. Python (FastAPI)
-
-9. Uvicorn
-
-10. Google Generative AI SDK
-
-11. Google Firestore
-
-12. Google Cloud Storage
-
-13. Cloud
-
-14. Cloud Run
-
-15. Artifact Registry
-
-16. IAM
-
-17. Cloud Build
-
-## 🧪 Run Locally
-
-### Install dependencies:
-
+ 2️⃣ Backend Setup
+```bash
+Copy code
 pip install -r requirements.txt
-
-
-### Run the backend:
-
-python main.py
-
-
-### Access frontend:
-
-http://localhost:8080
-
-## ☁️ Deploy to Cloud Run
-
-Authenticate:
-
-gcloud auth login
-gcloud config set project YOUR_PROJECT_ID
-
-
-Deploy:
-
+uvicorn main:app --reload
+3️⃣ Frontend Setup
+bash
+Copy code
+npm install
+npm run dev
+☁ Deploy to Cloud Run
+bash
+Copy code
+gcloud builds submit --tag gcr.io/$PROJECT_ID/smartstudy
 gcloud run deploy smartstudy-ai \
-  --source . \
-  --region asia-south1 \
-  --allow-unauthenticated
+--image gcr.io/$PROJECT_ID/smartstudy \
+--allow-unauthenticated
+🤝 Contributing
 
-## 🔐 Required Environment Variables (Cloud Run)
-Variables:
+Pull requests welcome!
+If you'd like to contribute, fork the repo and submit a PR.
 
-BUCKET_NAME	->             GCS bucket for file storage
+git checkout -b feature-name
+git commit -m "Added feature"
+git push origin feature-name
 
-GEMINI_API_KEY ->         Gemini Flash API key
+⭐ Support This Project
 
-GCP_PROJECT	->             Google Cloud project ID
+If you like this project, give it a star!
 
-## 🚀 Live Demo (Cloud Run)
+⭐ Star this repo
 
-🟢 **SmartStudy AI is live here:**  
-👉 https://smartstudy-ai-294186065460.asia-south1.run.app/
+
+<div align="center"> Made by <b>Shyam</b> </div> ```
+
+
 
 
 
