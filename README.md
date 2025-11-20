@@ -35,7 +35,6 @@ Transform notes, PDFs, and documents into **summaries, flashcards, and MCQs** us
 ✔ PDF extraction & OCR  
 ✔ Stored in Firestore with persistent user notes  
 
-[IMAGE — Architecture Diagram]
 
 ---
 
