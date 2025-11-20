@@ -45,7 +45,7 @@ Transform notes, PDFs, and documents into **summaries, flashcards, and MCQs** us
 | Problem | Solution |
 |---------|----------|
 | Manual note-making is time-consuming | Auto-generate summaries & MCQs |
-| Hard to revise lengthy PDFs | Flashcards auto-generated |
+| Handling multiple file types is complex | Unified upload pipeline handles PDFs, images, raw text |
 | Notes not accessible everywhere | Stored securely in Firestore |
 | Scaling apps is hard | Cloud Run handles autoscaling |
 
