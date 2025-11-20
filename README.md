@@ -94,6 +94,17 @@ Copy code
 npm install
 npm run dev
 ```
+
+### **🔐 Environment Variables**
+
+Create a .env file locally:
+```bash
+GEMINI_API_KEY=YOUR_KEY
+BUCKET_NAME=your-bucket
+GCP_PROJECT=your-project-id
+PORT=8080
+```
+
 ### **☁ Deploy to Cloud Run**
 ```bash
 Copy code
@@ -102,16 +113,30 @@ gcloud run deploy smartstudy-ai \
 --image gcr.io/$PROJECT_ID/smartstudy \
 --allow-unauthenticated
 ```
-### **🤝 Contributing**
+6️⃣ Create Storage Bucket
+```bash
+export PROJECT_ID=<your-id>
+export REGION=us-central1
+export BUCKET_NAME=<your-bucket>
+```
+Create a bucket in console or:
 
-Pull requests welcome!
-If you'd like to contribute, fork the repo and submit a PR.
+```bash
+Copy code
+gsutil mb -l $REGION gs://$BUCKET_NAME
+```
 
-git checkout -b feature-name
-git commit -m "Added feature"
-git push origin feature-name
-
-
+7️⃣ Build Docker Image
+```bash
+gcloud builds submit --tag gcr.io/$PROJECT_ID/smartstudy
+```
+8️⃣ Deploy to Cloud Run
+```bash
+gcloud run deploy smartstudy \
+--image gcr.io/$PROJECT_ID/smartstudy \
+--allow-unauthenticated \
+--region=$REGION
+```
 <div align="center"> Made by <b>Shyamprasad Puli</b> </div> ```
 
 
