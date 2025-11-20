@@ -66,18 +66,6 @@ Transform notes, PDFs, and documents into **summaries, flashcards, and MCQs** us
 
 ---
 
-## 🖥 **Screenshots**
-
-> Replace placeholders with real images
-
-**📌 Home Screen UI**  
-![UI Screenshot](https://via.placeholder.com/1200x600?text=App+UI)
-
-**📌 Flashcards Output**  
-![Output Screenshot](https://via.placeholder.com/1200x600?text=Flashcards+Output)
-
----
-
 ## 🧩 **Features**
 
 - ✨ Upload PDFs/images → extract content
