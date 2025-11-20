@@ -7,7 +7,7 @@ Transform notes, PDFs, and documents into **summaries, flashcards, and MCQs** us
 ---
 
 ### 🔗 **Live Demo (Cloud Run URL)**
-👉 _[https://your-deployment-url.com](https://smartstudy-ai-294186065460.asia-south1.run.app/)_
+👉 _[https://smartstudy-ai.com](https://smartstudy-ai-294186065460.asia-south1.run.app/)_
 
 ### 👤 **Author**
 **Shyamprasad Puli**
