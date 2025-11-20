@@ -114,7 +114,7 @@ git commit -m "Added feature"
 git push origin feature-name
 
 
-<div align="center"> Made by <b>Shyam</b> </div> ```
+<div align="center"> Made by <b>Shyamprasad Puli</b> </div> ```
 
 
 
