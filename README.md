@@ -68,7 +68,6 @@ Transform notes, PDFs, and documents into **summaries, flashcards, and MCQs** us
 
 - ✨ Upload PDFs/images → extract content
 - 🔍 Summarization using Gemini
-- 🧠 Auto-generated flashcards
 - 📝 MCQs for revision
 - ☁ Cloud Run serverless backend
 - 🔐 Stored securely in Firestore
